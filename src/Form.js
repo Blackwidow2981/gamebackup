@@ -312,36 +312,40 @@ const RegisterForm = () => {
             <CustomTabPanel value={value} index={1}>
              {!showcampaign &&( 
                 <Grid container spacing={2}>
-                    <div>
-                  <Box sx={{ minWidth: 120 }}>
-                     <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">
-                        Mode
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={mode}
-                        label="Mode"
-                        onChange={handleMode}
-                      >
-                        <MenuItem value={0}>Brand Ambassador</MenuItem>
-                        <MenuItem value={1}>New Product Launch</MenuItem>
-                        <MenuItem value={2}>Weekend Sale</MenuItem>
-                        <MenuItem value={3}>Special Event Campaign</MenuItem>
-                        <MenuItem value={4}>Festive Offer Campaign</MenuItem>
-                      </Select>
-                    </FormControl> 
-                    <Button variant="outlined" onClick={(e) => callModeApi(e)}>
-                    Generate
-                  </Button>
+         
+                <div>
+              <Box sx={{ minWidth: 120 }}>
+                 <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Mode
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={mode}
+                    label="Mode"
+                    onChange={handleMode}
+                  >
+                    <MenuItem value={0}>Brand Ambassador</MenuItem>
+                    <MenuItem value={1}>New Product Launch</MenuItem>
+                    <MenuItem value={2}>Weekend Sale</MenuItem>
+                    <MenuItem value={3}>Special Event Campaign</MenuItem>
+                    <MenuItem value={4}>Festive Offer Campaign</MenuItem>
+                  </Select>
+                </FormControl> 
+               
 
-                    
-                  </Box>
-                    
-                  
-                  </div>
-                  </Grid>
+                
+              </Box>
+                
+              
+              </div>
+              
+              
+              <Button variant="outlined" onClick={(e) => callModeApi(e)}>
+                Generate
+              </Button>
+              </Grid>
                 
                  
               )}
@@ -444,7 +448,12 @@ const RegisterForm = () => {
               )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
-                <PersonalizedEmailCampaign></PersonalizedEmailCampaign>
+                <PersonalizedEmailCampaign
+                sme_name={sme_name}
+                sme_business={sme_business}
+                sme_location={sme_location}
+                sme_USP={sme_USP}
+                />
 
             </CustomTabPanel>
           </Box>

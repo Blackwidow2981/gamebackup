@@ -12,7 +12,7 @@ import { TextField, Button, Container, Stack } from "@mui/material";
 import axios from "axios";
 
 
-const PersonalizedEmailCampaign = () => {
+const PersonalizedEmailCampaign = (props) => {
 
     const [personalizedEmail, setPersonalizedEmail] = useState([]);
 
@@ -64,11 +64,11 @@ const PersonalizedEmailCampaign = () => {
     ];
 
     const rows = [
-        { id: 1, cust_name: "Anil Kumar", cust_last_visit: '25/08/2023', cust_past_purchase: 'Americano and Croissant', cust_dob: "2/12/1988", cust_preferences:"Coffee", cust_email:"anil.kumar@email.com", cust_freq_of_visits: "Weekly", cust_preferred_time: "Morning"},
-        { id: 2, cust_name: "Sneha Karthik", cust_last_visit: '25/08/2023', cust_past_purchase: 'Latte and Muffin', cust_dob: "2/12/1988", cust_preferences:"Bakery", cust_email:"snehakarthikpriv@gmail.com", cust_freq_of_visits: "Monthly", cust_preferred_time: "Afternoon"},
-        { id: 3, cust_name: "Vishal Parab", cust_last_visit: '25/08/2023', cust_past_purchase: 'Espresso and Brownie', cust_dob: "2/12/1988", cust_preferences:"Coffee", cust_email:"vishalp902920@gmail.com", cust_freq_of_visits: "Monthly", cust_preferred_time: "Afternoon"},
-        { id: 4, cust_name: "Seetha", cust_last_visit: '26/08/2023', cust_past_purchase: 'Veg Sandwich and Latte', cust_dob: "2/12/1988", cust_preferences:"Veg Items", cust_email:"seetha0712@gmail.com", cust_freq_of_visits: "Weekly", cust_preferred_time: "Evening"},
-        { id: 5, cust_name: "Sonali Gupta", cust_last_visit: '08/09/2023', cust_past_purchase: 'Espresso', cust_dob: "2/12/1988", cust_preferences:"Coffee", cust_email:"sonali.sharma@email.com", cust_freq_of_visits: "Monthly", cust_preferred_time: "Morning"},
+        { id: 1, cust_name: "Anil Kumar", cust_last_visit: '2023-08-25', cust_past_purchase: 'Americano and Croissant', cust_dob: "1988-02-12", cust_preferences:"Coffee", cust_email:"anil.kumar@email.com", cust_freq_of_visits: "Weekly", cust_preferred_time: "Morning"},
+        { id: 2, cust_name: "Sneha Karthik", cust_last_visit: '2023-08-26', cust_past_purchase: 'Latte and Muffin', cust_dob: "2000-09-09", cust_preferences:"Bakery", cust_email:"snehakarthikpriv@gmail.com", cust_freq_of_visits: "Monthly", cust_preferred_time: "Afternoon"},
+        { id: 3, cust_name: "Vishal Parab", cust_last_visit: '2023-08-25', cust_past_purchase: 'Espresso and Brownie', cust_dob: "1995-09-05", cust_preferences:"Coffee", cust_email:"vishalp902920@gmail.com", cust_freq_of_visits: "Monthly", cust_preferred_time: "Afternoon"},
+        { id: 4, cust_name: "Seetha", cust_last_visit: '2023-08-25', cust_past_purchase: 'Veg Sandwich and Latte', cust_dob: "1985-11-22", cust_preferences:"Veg Items", cust_email:"seetha0712@gmail.com", cust_freq_of_visits: "Weekly", cust_preferred_time: "Evening"},
+        { id: 5, cust_name: "Sonali Gupta", cust_last_visit: '2023-09-08', cust_past_purchase: 'Espresso', cust_dob: "2001-07-08", cust_preferences:"Coffee", cust_email:"sonali.sharma@email.com", cust_freq_of_visits: "Monthly", cust_preferred_time: "Morning"},
     ];
 
     function generatePersoanlizedEmail(sme_name, sme_business, sme_location, sme_USP, cust_name, cust_last_visit, cust_past_purchase, cust_dob, cust_preferences, cust_email, cust_freq_of_visits, cust_preferred_time) {
@@ -102,7 +102,7 @@ const PersonalizedEmailCampaign = () => {
       }
 
       const handleRowClick = (params) => {
-        generatePersoanlizedEmail(params.row["sme_name"], params.row["sme_business"], params.row["sme_location"], params.row["sme_USP"], params.row["cust_name"], params.row["cust_last_visit"], params.row["cust_past_purchase"], params.row["cust_dob"], params.row["cust_preferences"], params.row["cust_email"], params.row["cust_freq_of_visits"], params.row["cust_preferred_time"])
+        generatePersoanlizedEmail(props.sme_name, props.sme_business, props.sme_location, props.sme_USP, params.row["cust_name"], params.row["cust_last_visit"], params.row["cust_past_purchase"], params.row["cust_dob"], params.row["cust_preferences"], params.row["cust_email"], params.row["cust_freq_of_visits"], params.row["cust_preferred_time"])
       };
 
     return( 
