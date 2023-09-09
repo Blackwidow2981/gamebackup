@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TextField, Button, Container, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Grid from '@mui/material/Grid';
 import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -19,12 +20,16 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import LinearBuff from "./LoadingBar"
+import PersonalizedEmailCampaign from "./PersonalizedEmailCampaign";
 
 const RegisterForm = () => {
   const [sme_name, setsme_name] = useState("");
   const [sme_business, setsme_business] = useState("");
   const [sme_location, setsme_location] = useState("");
   const [showdashboard, setshowdashboard] = React.useState(false);
+  const [showblog, setshowblog] = React.useState(false);
+  const [showcampaign, setshowcampaign] = React.useState(false);
   const [showcampaigngenerate, setshowcampaigngenerate] = React.useState(false);
   const [sme_USP, setPassword] = useState("");
   const [product_list, setproduct_list] = useState("");
@@ -50,8 +55,11 @@ const RegisterForm = () => {
       •
     </Box>
   );
+  
+
 
   const [backendresponse, setbackendresponse] = React.useState();
+  const [backendblogresponse, setbackendblogresponse] = React.useState();
 
   const [backendgenerateresponse, setbackendgenerateresponse] = React.useState([]);
   const [backendgenerateresponseshow, setbackendgenerateresponseshow] = React.useState(true);
@@ -74,7 +82,6 @@ const RegisterForm = () => {
     formData.append("sme_location", sme_location);
     formData.append("sme_USP", sme_USP);
     formData.append("file", product_list);
-    formData.append("mode", mode);
 
     axios
       .post("http://10.196.221.178:5000/generateFirstCampaign", formData)
@@ -84,9 +91,13 @@ const RegisterForm = () => {
       )
 
       .catch((err) => console.log(err));
+    
   }
+  
+
 
   function callModeApi(e) {
+    setshowcampaign(true);
     const formData = new FormData();
     formData.append("sme_name", sme_name);
     formData.append("sme_business", sme_business);
@@ -109,6 +120,32 @@ const RegisterForm = () => {
 
       .catch((err) => console.log(err));
   }
+  function callBlogApi(e) {
+    setshowblog(true);
+    const formData = new FormData();
+    formData.append("sme_name", sme_name);
+    formData.append("sme_business", sme_business);
+    formData.append("sme_location", sme_location);
+    formData.append("sme_USP", sme_USP);
+    formData.append("file", product_list);
+ 
+
+    axios
+      .post("http://10.196.221.178:5000/createBlog", formData)
+      .then((res) =>
+      {
+        console.log(res)
+        setbackendblogresponse(res.data.data)
+       
+      }
+
+    
+
+        
+      )
+
+      .catch((err) => console.log(err));
+  }
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -121,7 +158,7 @@ const RegisterForm = () => {
         {...other}
       >
         {value === index && (
-          <Box sx={{ p: 3 }}>
+          <Box sx={{ p: 4 }}>
             <Typography>{children}</Typography>
           </Box>
         )}
@@ -140,11 +177,24 @@ const RegisterForm = () => {
     };
   }
 
+  function goBackToSurvey(e){
+    window.location.href = "http://localhost:3001/";
+    setshowdashboard(false);
+  };
+
+  function backGenerateAction(e){
+    setbackendgenerateresponse("");
+    setshowcampaign(false);
+    // setbackendgenerateresponseshow(true)
+  };
+
+
+
   return (
     <React.Fragment>
       {!showdashboard && (
         <div>
-          <h2>Survey</h2>
+          <h1>Survey</h1>
           <form onSubmit={handleSubmit}>
             <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
               <TextField
@@ -188,8 +238,9 @@ const RegisterForm = () => {
             />
 
             <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-              <Button variant="contained" color="primary" component="label">
-                Tell us about your customers!
+              <Button variant="contained" color="primary" component="label" sx={{bgcolor:"red"}}>
+                Tell us about the Products you sell!
+                
                 <input
                   type="file"
                   hidden
@@ -221,11 +272,12 @@ const RegisterForm = () => {
                 aria-label="basic tabs example"
               >
                 <Tab label="Home" {...a11yProps(0)} />
-                <Tab label="Generate" {...a11yProps(1)} />
-                <Tab label="Personalize" {...a11yProps(2)} />
+                <Tab label="Generate Campaigns" {...a11yProps(1)} />
+                <Tab label="Generate Blogs" {...a11yProps(2)} />
+                <Tab label="Personalize" {...a11yProps(3)} />
               </Tabs>
             </Box>
-            <CustomTabPanel value={value} index={0}>
+            <CustomTabPanel value={value} index={0} >
               <Card sx={{ minWidth: 275 }}>
                 <CardContent>
                   <Typography
@@ -233,7 +285,7 @@ const RegisterForm = () => {
                     color="text.secondary"
                     gutterBottom
                   >
-                    Your First Ad Campaign is Ready!!!!
+    
                     <br></br>
                   </Typography>
                   <Typography variant="h3" component="div" sx={{  display: 'flex', justifyContent: 'space-around' }}>
@@ -258,15 +310,11 @@ const RegisterForm = () => {
               
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              <Stack direction="row" spacing={2}>
-                {backendgenerateresponseshow && <Button variant="outlined" onClick={handleClick}>
-                  Run Campaign
-                </Button>}
-                
-                {isShown ? (
+             {!showcampaign &&( 
+                <Grid container spacing={2}>
                     <div>
                   <Box sx={{ minWidth: 120 }}>
-                    {backendgenerateresponseshow && <FormControl fullWidth>
+                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
                         Mode
                       </InputLabel>
@@ -280,36 +328,135 @@ const RegisterForm = () => {
                         <MenuItem value={0}>Brand Ambassador</MenuItem>
                         <MenuItem value={1}>New Product Launch</MenuItem>
                         <MenuItem value={2}>Weekend Sale</MenuItem>
-                        <MenuItem value={3}>Special Event Campagin</MenuItem>
+                        <MenuItem value={3}>Special Event Campaign</MenuItem>
                         <MenuItem value={4}>Festive Offer Campaign</MenuItem>
                       </Select>
-                      
-                    </FormControl> }
-                    
-                    
-                  </Box>
+                    </FormControl> 
                     <Button variant="outlined" onClick={(e) => callModeApi(e)}>
                     Generate
                   </Button>
+
+                    
+                  </Box>
+                    
+                  
                   </div>
-                ) : null }
-                 <Button variant="outlined" >
-                Blogs
-              </Button>
-              </Stack>
+                  </Grid>
+                
+                 
+              )}
+              {showcampaign && (
+                <div>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
+                  <Typography
+                    sx={{  display: 'flex',fontSize: 20, justifyContent: 'space-around', }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+             
+                    <br></br>
+                  </Typography>
+                  <Typography variant="h3" component="div" sx={{  display: 'flex', justifyContent: 'space-around' }}>
+                  {backendgenerateresponse && backendgenerateresponse["Campaign Title"]}
+                  
+                  </Typography>
+                  <br></br>
+                  <Typography variant="h6"  sx={{  display: 'flex', justifyContent: 'center', }} >
+                  {backendgenerateresponse && backendgenerateresponse["Campaign Description"]}
+                  </Typography>
+                  <br></br>
+                  <Typography variant="h5" component="div" sx={{  display: 'flex', justifyContent: 'space-around', color:'red' }}>
+                  {backendgenerateresponse && backendgenerateresponse["Campaign Call to Action"]}
+                    <br />
+                   
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  
+                </CardActions>
+              </Card>
+              <Button
+              variant="outlined"
+              color="secondary"
+              type="submit"
+              onClick={(e) => backGenerateAction()}
+            >
+              Back
+            </Button>
+            </div>
+              )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-              Item Three
+            {!showblog &&( 
+                <Grid container spacing={2}>
+                    <div>
+                  
+                    <Button variant="outlined" onClick={(e) => callBlogApi(e)}>
+                    Generate
+                  </Button>
+
+                    
+             
+                    
+                  
+                  </div>
+                  </Grid>
+                
+                 
+              )}
+              {showblog && (
+                <div>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
+                  <Typography
+                    sx={{  display: 'flex',fontSize: 20, justifyContent: 'space-around', }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                   
+                  </Typography>
+                  <Typography variant="h5" component="div" sx={{ justifyContent: 'space-around' }}>
+                  {backendblogresponse && backendblogresponse.split("</br>").map((row,index)=>
+                  (
+                    <p>{row}</p>
+                  )
+                  )}
+                
+                  
+                  </Typography>
+                  <br></br>
+                 
+                </CardContent>
+                <CardActions>
+                  
+                </CardActions>
+              </Card>
+              <Button
+              variant="outlined"
+              color="secondary"
+              type="submit"
+              onClick={(e) => setshowblog(false)}
+            >
+              Back
+            </Button>
+            </div>
+              )}
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={3}>
+                <PersonalizedEmailCampaign></PersonalizedEmailCampaign>
+
             </CustomTabPanel>
           </Box>
+          
 
           <Button
             variant="outlined"
             color="secondary"
             type="submit"
-            onClick={(e) => setshowdashboard(false)}
+            onClick={(e) => goBackToSurvey()}
           >
-            Back
+            Go Back to the Survey
           </Button>
         </div>
       )}
